@@ -12,7 +12,8 @@ LIB_DIR = ../lib
 all: $(LIB_DIR)/libCOS.a
 
 SRC = \
-COSUser.cpp
+COSUser.cpp \
+COSFile.cpp \
 
 OBJS = $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(SRC))
 
