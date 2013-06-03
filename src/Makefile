@@ -18,6 +18,8 @@ COSProcess.cpp \
 COSSignal.cpp \
 COSStrSignal.cpp \
 COSRand.cpp \
+COSTimer.cpp \
+COSTime.cpp \
 COSNaN.cpp \
 
 OBJS = $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(SRC))
