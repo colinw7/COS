@@ -18,6 +18,7 @@ COSProcess.cpp \
 COSSignal.cpp \
 COSStrSignal.cpp \
 COSRand.cpp \
+COSRead.cpp \
 COSTimer.cpp \
 COSTime.cpp \
 COSNaN.cpp \
