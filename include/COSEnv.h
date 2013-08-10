@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <algorithm>
@@ -23,7 +24,15 @@ namespace COSEnv {
 
     char *envp = strdup((char *) env.c_str());
 
-    int error = ::putenv(envp);
+    /*int error = */ ::putenv(envp);
+  }
+
+  inline void setenv(const std::string &name, int value) {
+    char str[128];
+
+    ::sprintf(str, "%d", value);
+
+    setenv(name, str);
   }
 
   inline void unsetenv(const std::string &name) {
