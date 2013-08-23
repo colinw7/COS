@@ -12,16 +12,20 @@ LIB_DIR = ../lib
 all: $(LIB_DIR)/libCOS.a
 
 SRC = \
-COSUser.cpp \
+COSErr.cpp \
 COSFile.cpp \
+COSLimit.cpp \
+COSNaN.cpp \
 COSProcess.cpp \
-COSSignal.cpp \
-COSStrSignal.cpp \
+COSPty.cpp \
 COSRand.cpp \
 COSRead.cpp \
-COSTimer.cpp \
+COSSignal.cpp \
+COSStrSignal.cpp \
+COSTerm.cpp \
 COSTime.cpp \
-COSNaN.cpp \
+COSTimer.cpp \
+COSUser.cpp \
 
 OBJS = $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(SRC))
 
