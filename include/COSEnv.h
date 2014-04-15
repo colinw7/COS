@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <algorithm>
+#include <unistd.h>
 
 namespace COSEnv {
   inline bool checkenv(const std::string &name) {
