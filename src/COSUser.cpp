@@ -7,6 +7,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <sys/stat.h>
+#include <unistd.h>
 
 uint
 COSUser::

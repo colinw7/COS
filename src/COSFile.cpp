@@ -10,6 +10,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <dirent.h>
+#include <unistd.h>
 
 #ifdef OS_UNIX
 #include <libgen.h>

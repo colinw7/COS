@@ -2,6 +2,7 @@
 
 #include <cstring>
 #include <sys/time.h>
+#include <unistd.h>
 
 #define HAS_SYS_TIMES 1
 

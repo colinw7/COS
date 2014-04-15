@@ -3,6 +3,7 @@
 #include <cerrno>
 #include <vector>
 #include <poll.h>
+#include <unistd.h>
 
 bool
 COSRead::
