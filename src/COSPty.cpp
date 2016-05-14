@@ -17,7 +17,7 @@
 extern "C" {
 # include <termios.h>
 # include <sys/ioctl.h>
-};
+}
 
 #define HAS_POSIX_OPENPT 1
 

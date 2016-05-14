@@ -31,7 +31,7 @@ std::string
 COSTime::
 getTimeString(const std::string &format)
 {
-  time_t t = time(NULL);
+  time_t t = time(0);
 
   return getTimeString(t, format);
 }
@@ -44,7 +44,7 @@ getTimeString(time_t t, const std::string &format)
 
   struct tm *tm = localtime(&t);
 
-  if (tm == NULL)
+  if (! tm)
     tm = gmtime(&t);
 
   strftime(time_string, 256, format.c_str(), tm);
@@ -62,7 +62,7 @@ decodeTimeString(const std::string &time_string, const std::string &format, time
 
   char *p = strptime(time_string.c_str(), format.c_str(), &tm);
 
-  if (p == NULL)
+  if (! p)
     return false;
 
   tm.tm_wday  = 0;
@@ -78,19 +78,19 @@ void
 COSTime::
 getTime(int *year, int *month, int *day, int *hour, int *min, int *sec)
 {
-  time_t t = time(NULL);
+  time_t t = time(0);
 
   struct tm *tm = localtime(&t);
 
-  if (tm == NULL)
+  if (! tm)
     tm = gmtime(&t);
 
-  if (year  != NULL) *year  = tm->tm_year;
-  if (month != NULL) *month = tm->tm_mon;
-  if (day   != NULL) *day   = tm->tm_mday;
-  if (hour  != NULL) *hour  = tm->tm_hour;
-  if (min   != NULL) *min   = tm->tm_min;
-  if (sec   != NULL) *sec   = tm->tm_sec;
+  if (year ) *year  = tm->tm_year;
+  if (month) *month = tm->tm_mon;
+  if (day  ) *day   = tm->tm_mday;
+  if (hour ) *hour  = tm->tm_hour;
+  if (min  ) *min   = tm->tm_min;
+  if (sec  ) *sec   = tm->tm_sec;
 }
 
 time_t
@@ -143,7 +143,7 @@ getHRTime(int *secs, int *usecs)
 {
   struct timeval timeval;
 
-  gettimeofday(&timeval, NULL);
+  gettimeofday(&timeval, 0);
 
   *secs  = timeval.tv_sec;
   *usecs = timeval.tv_usec;

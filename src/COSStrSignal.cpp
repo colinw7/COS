@@ -1,6 +1,4 @@
-#include <COSSignal.h>
-
-#include <cstring>
+#include <COSStrSignal.h>
 
 struct SigName {
   int         num;

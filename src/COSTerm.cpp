@@ -13,7 +13,7 @@ extern "C" {
 
   extern int tgetent(char *, char *);
   extern int tgetnum(char *);
-};
+}
 
 #include "sys/ioctl.h"
 

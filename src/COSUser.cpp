@@ -6,8 +6,8 @@
 #include <grp.h>
 #include <cstdio>
 #include <cstdlib>
-#include <sys/stat.h>
 #include <unistd.h>
+#include <sys/stat.h>
 
 uint
 COSUser::
