@@ -51,3 +51,67 @@ set_nan(double &real)
   return false;
 #endif
 }
+
+//------
+
+bool
+COSNaN::
+is_inf(double real)
+{
+#ifdef OS_UNIX
+  if (IsInf(real))
+    return true;
+#endif
+
+  return false;
+}
+
+bool
+COSNaN::
+is_pos_inf(double real)
+{
+#ifdef OS_UNIX
+  if (IsPosInf(real))
+    return true;
+#endif
+
+  return false;
+}
+
+bool
+COSNaN::
+is_neg_inf(double real)
+{
+#ifdef OS_UNIX
+  if (IsNegInf(real))
+    return true;
+#endif
+
+  return false;
+}
+
+bool
+COSNaN::
+set_pos_inf(double &real)
+{
+#ifdef OS_UNIX
+  SetPosInf(real);
+
+  return true;
+#else
+  return false;
+#endif
+}
+
+bool
+COSNaN::
+set_neg_inf(double &real)
+{
+#ifdef OS_UNIX
+  SetNegInf(real);
+
+  return true;
+#else
+  return false;
+#endif
+}
