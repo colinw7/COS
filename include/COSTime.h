@@ -15,6 +15,7 @@ namespace COSTime {
   bool decodeTimeString(const std::string &time_string, const std::string &format, time_t &t);
 
   void getTime(int *year, int *month, int *day, int *hour, int *min, int *sec);
+  void getTime(time_t t, int *year, int *month, int *day, int *hour, int *min, int *sec);
 
   time_t encodeTime(int year, int month, int day, int hour, int min, int sec);
 

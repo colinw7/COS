@@ -1,23 +1,39 @@
 #include <COSNaN.h>
-#include <NaN.h>
 
+#define USE_FP_CLASSIFY 1
+
+#ifdef USE_FP_CLASSIFY
+#include <cmath>
+#else
 #include <std_os.h>
+#include <NaN.h>
+#endif
 
 bool
 COSNaN::
 has_nan()
 {
+#ifdef USE_FP_CLASSIFY
+  return true;
+#endif
+
 #ifdef OS_UNIX
   return true;
-#else
-  return false;
 #endif
+
+  return false;
 }
 
 bool
 COSNaN::
 is_nan(double real)
 {
+#ifdef USE_FP_CLASSIFY
+  int fpc = std::fpclassify(real);
+
+  return (fpc == FP_NAN);
+#endif
+
 #ifdef OS_UNIX
   if (IsNaN(real))
     return true;
@@ -30,26 +46,34 @@ bool
 COSNaN::
 set_nan(double *real)
 {
+#ifdef USE_FP_CLASSIFY
+  *real = NAN;
+  return true;
+#endif
+
 #ifdef OS_UNIX
   SetNaN(*real);
-
   return true;
-#else
-  return false;
 #endif
+
+  return false;
 }
 
 bool
 COSNaN::
 set_nan(double &real)
 {
+#ifdef USE_FP_CLASSIFY
+  real = NAN;
+  return true;
+#endif
+
 #ifdef OS_UNIX
   SetNaN(real);
-
   return true;
-#else
-  return false;
 #endif
+
+  return false;
 }
 
 //------
@@ -58,9 +82,14 @@ bool
 COSNaN::
 is_inf(double real)
 {
+#ifdef USE_FP_CLASSIFY
+  int fpc = std::fpclassify(real);
+
+  return (fpc == FP_INFINITE);
+#endif
+
 #ifdef OS_UNIX
-  if (IsInf(real))
-    return true;
+  return IsInf(real);
 #endif
 
   return false;
@@ -70,9 +99,14 @@ bool
 COSNaN::
 is_pos_inf(double real)
 {
+#ifdef USE_FP_CLASSIFY
+  int fpc = std::fpclassify(real);
+
+  return (fpc == FP_INFINITE && real > 0);
+#endif
+
 #ifdef OS_UNIX
-  if (IsPosInf(real))
-    return true;
+  return (IsPosInf(real))
 #endif
 
   return false;
@@ -82,9 +116,14 @@ bool
 COSNaN::
 is_neg_inf(double real)
 {
+#ifdef USE_FP_CLASSIFY
+  int fpc = std::fpclassify(real);
+
+  return (fpc == FP_INFINITE && real < 0);
+#endif
+
 #ifdef OS_UNIX
-  if (IsNegInf(real))
-    return true;
+  return (IsNegInf(real));
 #endif
 
   return false;
@@ -94,24 +133,32 @@ bool
 COSNaN::
 set_pos_inf(double &real)
 {
+#ifdef USE_FP_CLASSIFY
+  real = INFINITY;
+  return true;
+#endif
+
 #ifdef OS_UNIX
   SetPosInf(real);
-
   return true;
-#else
-  return false;
 #endif
+
+  return false;
 }
 
 bool
 COSNaN::
 set_neg_inf(double &real)
 {
+#ifdef USE_FP_CLASSIFY
+  real = -INFINITY;
+  return true;
+#endif
+
 #ifdef OS_UNIX
   SetNegInf(real);
-
   return true;
-#else
-  return false;
 #endif
+
+  return false;
 }

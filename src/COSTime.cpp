@@ -80,6 +80,13 @@ getTime(int *year, int *month, int *day, int *hour, int *min, int *sec)
 {
   time_t t = time(0);
 
+  getTime(t, year, month, day, hour, min, sec);
+}
+
+void
+COSTime::
+getTime(time_t t, int *year, int *month, int *day, int *hour, int *min, int *sec)
+{
   struct tm *tm = localtime(&t);
 
   if (! tm)
