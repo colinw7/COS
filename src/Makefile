@@ -22,6 +22,7 @@ COSRand.cpp \
 COSRead.cpp \
 COSSignal.cpp \
 COSStrSignal.cpp \
+COSSystem.cpp \
 COSTerm.cpp \
 COSTime.cpp \
 COSTimer.cpp \
@@ -29,7 +30,10 @@ COSUser.cpp \
 
 OBJS = $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(SRC))
 
-CPPFLAGS = -I$(INC_DIR) -I.
+CPPFLAGS = \
+-std=c++11 \
+-I$(INC_DIR) \
+-I.
 
 clean:
 	$(RM) -f $(OBJ_DIR)/*.o

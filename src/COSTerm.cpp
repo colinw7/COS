@@ -52,7 +52,7 @@ hp_colors[] = {
   "&v6S", /* Cyan    */
 };
 
-const char **COSTerm::colors_ = NULL;
+const char **COSTerm::colors_ = nullptr;
 
 std::string
 COSTerm::
@@ -60,7 +60,7 @@ getTerminalName(int fd)
 {
   char *tty_name = ttyname(fd);
 
-  if (tty_name == NULL)
+  if (! tty_name)
     return "";
 
   return tty_name;
@@ -70,9 +70,9 @@ std::string
 COSTerm::
 getTerminalPath()
 {
-  char *tty_name = ctermid(NULL);
+  char *tty_name = ctermid(0);
 
-  if (tty_name == NULL)
+  if (! tty_name)
     return "";
 
   return tty_name;
@@ -176,7 +176,7 @@ getCharSize(int *rows, int *cols)
 
   char *columns;
 
-  if ((columns = getenv("COLUMNS")) != NULL)
+  if ((columns = getenv("COLUMNS")) != nullptr)
     *cols = atoi(columns);
 
   if (*cols == 0)
@@ -283,7 +283,7 @@ getNumColumns()
 
   const char *term;
 
-  if ((term = getenv("TERM")) == NULL)
+  if ((term = getenv("TERM")) == nullptr)
     term = "vt100";
 
   int no = tgetent(term_buffer, (char *) term);
@@ -312,10 +312,10 @@ const char **
 COSTerm::
 getColorStrs()
 {
-  if (colors_ == NULL) {
+  if (! colors_) {
     const char *term;
 
-    if ((term = getenv("TERM")) == NULL)
+    if ((term = getenv("TERM")) == nullptr)
       term = "vt100";
 
     if      (strcmp(term, "xterm"      ) == 0 ||
@@ -324,8 +324,8 @@ getColorStrs()
 
       char *color_xterm;
 
-      if ((color_xterm = getenv( "COLOR_XTERM")) == NULL &&
-          (color_xterm = getenv("COLOUR_XTERM")) == NULL)
+      if ((color_xterm = getenv( "COLOR_XTERM")) == nullptr &&
+          (color_xterm = getenv("COLOUR_XTERM")) == nullptr)
         colored = false;
 
       if (colored)
@@ -476,7 +476,7 @@ openMasterPty(int *fd, std::string &slaveName)
 
   char *ptr = ptsname(*fd);
 
-  if (ptr == NULL) {
+  if (! ptr) {
     closeNoError(*fd); *fd = -1;
     return false;
   }

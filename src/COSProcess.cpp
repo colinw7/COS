@@ -159,7 +159,7 @@ COSProcess::
 system(const char *command)
 {
   // Check if shell is available
-  if (command == NULL)
+  if (! command)
     return isShellAvailable();
 
   /* The parent process (the caller of system()) blocks SIGCHLD and ignores
@@ -205,9 +205,9 @@ system(const char *command)
       //  char path[PATH_MAX];
       //  confstr(_CS_PATH, path, PATH_MAX);
       //  setenv("PATH", path, /*overwrite*/1);
-      //  execlp("sh", "sh", "-c", command, (char *) NULL);
+      //  execlp("sh", "sh", "-c", command, (char *) 0);
 
-      execl("/bin/sh", "sh", "-c", command, (char *) NULL);
+      execl("/bin/sh", "sh", "-c", command, (char *) 0);
 
       _exit(127); /* We could not exec the shell */
     }
@@ -295,21 +295,9 @@ bool
 COSProcess::
 executeCommand(const std::string &command, CommandState *state)
 {
-  FILE *fp = openProcess(command, "r");
+  std::string output;
 
-  if (fp == NULL)
-    return false;
-
-  int c;
-
-  while ((c = fgetc(fp)) != EOF) { }
-
-  bool rc = closeProcess(fp);
-
-  if (state != NULL)
-    *state = command_state_;
-
-  return rc;
+  return executeCommand(command, output, state);
 }
 
 bool
@@ -320,7 +308,7 @@ executeCommand(const std::string &command, std::string &output, CommandState *st
 
   FILE *fp = openProcess(command, "r");
 
-  if (fp == NULL)
+  if (! fp)
     return false;
 
   int c;
@@ -330,7 +318,7 @@ executeCommand(const std::string &command, std::string &output, CommandState *st
 
   bool rc = closeProcess(fp);
 
-  if (state != NULL)
+  if (state)
     *state = command_state_;
 
   return rc;
@@ -347,7 +335,7 @@ openProcess(const std::string &command, const std::string &mode)
 #else
   std::cerr << "COSProcess::openProcess: Unimplemented" << std::endl;
 
-  return NULL;
+  return nullptr;
 #endif
 }
 

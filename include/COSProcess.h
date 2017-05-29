@@ -43,8 +43,9 @@ namespace COSProcess {
 
   bool pipe(int *ifd, int *ofd);
 
-  bool executeCommand(const std::string &command, CommandState *state = NULL);
-  bool executeCommand(const std::string &command, std::string &output, CommandState *state = NULL);
+  bool executeCommand(const std::string &command, CommandState *state=nullptr);
+  bool executeCommand(const std::string &command, std::string &output,
+                      CommandState *state=nullptr);
 
   FILE *openProcess(const std::string &command, const std::string &mode);
   bool  closeProcess(FILE *fp);
