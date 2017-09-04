@@ -3,17 +3,18 @@
 
 #if defined(OS_LINUX)
 
+#include <cmath>
 #include <bits/nan.h>
 
-#define IsNaN(X) isnan(X)
-#define IsNaNF(X) isnan((double) (X))
-#define IsInf(X) (isinf(X)!=0)
-#define IsPosInf(X) (isinf(X)==1)
-#define IsNegInf(X) (isinf(X)==-1)
-#define NaN(X) isnan(X)
-#define SetNaN(X) (X = NAN)
-#define SetPosInf(X) (X = HUGE_VAL)
-#define SetNegInf(X) (X = -HUGE_VAL)
+#define IsNaN(X) std::isnan(X)
+#define IsNaNF(X) std::isnan((double) (X))
+#define IsInf(X) (std::isinf(X)!=0)
+#define IsPosInf(X) (X==std::numeric_limits<double>::infinity())
+#define IsNegInf(X) (X==-std::numeric_limits<double>::infinity())
+#define NaN(X) std::isnan(X)
+#define SetNaN(X) (X = std::numeric_limits<double>::quiet_NaN())
+#define SetPosInf(X) (X = std::numeric_limits<double>::infinity())
+#define SetNegInf(X) (X = -std::numeric_limits<double>::infinity())
 
 #elif defined(OS_OSX)
 
