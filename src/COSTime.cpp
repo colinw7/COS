@@ -2,7 +2,10 @@
 
 #include <cstring>
 #include <sys/time.h>
+#include <sys/timeb.h>
 #include <unistd.h>
+
+#define OS_UNIX 1
 
 #define HAS_SYS_TIMES 1
 

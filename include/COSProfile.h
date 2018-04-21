@@ -25,25 +25,21 @@ class COSElapsed {
   CHRTime     start_time_;
 };
 
-class COSTotalProfile {
- private:
-  CStringId id_;
-  CHRTime   time_;
-  uint      num_;
-  bool      valid_;
+//------
 
+class COSTotalProfile {
  public:
-  COSTotalProfile() :
-   id_(), time_(), num_(0), valid_(false) {
+  COSTotalProfile(CStringIdMap *stringMap) :
+   stringMap_(stringMap), id_(), time_(), num_(0), valid_(false) {
   }
 
-  COSTotalProfile(const CStringId &id, const CHRTime &dtime) :
-   id_(id), time_(dtime), num_(1), valid_(false) {
+  COSTotalProfile(CStringIdMap *stringMap, const CStringId &id, const CHRTime &dtime) :
+   stringMap_(stringMap), id_(id), time_(dtime), num_(1), valid_(false) {
   }
 
  ~COSTotalProfile() {
     if (valid_)
-      std::cout << std::string(id_) << ": " << num_ << ": " << time_ << std::endl;
+      std::cout << stringMap_->lookup(id_) << ": " << num_ << ": " << time_ << std::endl;
   }
 
   void setValid() {
@@ -55,7 +51,16 @@ class COSTotalProfile {
 
     ++num_;
   }
+
+ private:
+  CStringIdMap* stringMap_ { nullptr };
+  CStringId     id_;
+  CHRTime       time_;
+  uint          num_   { 0 };
+  bool          valid_ { false };
 };
+
+//------
 
 class COSProfile {
  public:
@@ -75,7 +80,7 @@ class COSProfile {
     if (p != totalMap_.end())
       (*p).second.addTime(dtime);
     else {
-      p = totalMap_.insert(p, TotalMap::value_type(id_, COSTotalProfile(id_, dtime)));
+      p = totalMap_.insert(p, TotalMap::value_type(id_, COSTotalProfile(&stringMap_, id_, dtime)));
 
       (*p).second.setValid();
     }
@@ -88,7 +93,8 @@ class COSProfile {
   }
 
  private:
-  static TotalMap totalMap_;
+  static TotalMap     totalMap_;
+  static CStringIdMap stringMap_;
 
   CStringId id_;
   CHRTime   start_time_;
