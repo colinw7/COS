@@ -47,7 +47,7 @@ outputError(bool useErr, int err, bool flushStdout, const char *format, va_list 
 {
   enum { BUF_SIZE = 500 };
 
-  char buf[BUF_SIZE], userMsg[BUF_SIZE], errText[BUF_SIZE];
+  char buf[2*BUF_SIZE], userMsg[BUF_SIZE], errText[BUF_SIZE];
 
   vsnprintf(userMsg, BUF_SIZE, format, ap);
 
@@ -57,7 +57,7 @@ outputError(bool useErr, int err, bool flushStdout, const char *format, va_list 
   else
     snprintf(errText, BUF_SIZE, ":");
 
-  snprintf(buf, BUF_SIZE, "ERROR%s %s\n", errText, userMsg);
+  snprintf(buf, 2*BUF_SIZE + 32, "ERROR%s %s\n", errText, userMsg);
 
   if (flushStdout)
     fflush(stdout); /* Flush any pending stdout */
