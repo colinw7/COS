@@ -22,10 +22,11 @@ namespace COSTime {
   CHRTime getHRTime();
   CHRTime diffHRTime(const CHRTime &time1, const CHRTime &time2);
 
-  void getHRTime(int *secs, int *usecs);
-  void diffHRTime(int secs1, int usecs1, int secs2, int usecs2, int *decs, int *dusecs);
-  void diffHRTime(int secs1, int usecs1, int secs2, int usecs2, int *dusecs);
-  void diffHRTime(int secs1, int usecs1, int secs2, int usecs2, double *decs);
+  void getHRTime(CHRTime &t);
+
+  void diffHRTime(long secs1, long usecs1, long secs2, long usecs2, long *decs, long *dusecs);
+  void diffHRTime(long secs1, long usecs1, long secs2, long usecs2, long *dusecs);
+  void diffHRTime(long secs1, long usecs1, long secs2, long usecs2, double *decs);
 
   uint getElapsedCPU();
 

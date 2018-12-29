@@ -91,6 +91,10 @@ struct CHRTime {
 
   bool isSet() const { return secs > 0 || usecs > 0; }
 
+  CHRTime diffTime(const CHRTime &hrtime2=getTime()) const {
+    return diffTime(*this, hrtime2);
+  }
+
   static CHRTime getTime() {
     CHRTime hrtime;
 

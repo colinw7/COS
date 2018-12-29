@@ -130,7 +130,7 @@ getHRTime()
 {
   CHRTime hrtime;
 
-  getHRTime(&hrtime.secs, &hrtime.usecs);
+  getHRTime(hrtime);
 
   return hrtime;
 }
@@ -141,27 +141,26 @@ diffHRTime(const CHRTime &hrtime1, const CHRTime &hrtime2)
 {
   CHRTime hrtime;
 
-  diffHRTime(hrtime1.secs, hrtime1.usecs, hrtime2.secs, hrtime2.usecs,
-             &hrtime.secs, &hrtime.usecs);
+  diffHRTime(hrtime1.secs, hrtime1.usecs, hrtime2.secs, hrtime2.usecs, &hrtime.secs, &hrtime.usecs);
 
   return hrtime;
 }
 
 void
 COSTime::
-getHRTime(int *secs, int *usecs)
+getHRTime(CHRTime &t)
 {
   struct timeval timeval;
 
   gettimeofday(&timeval, 0);
 
-  *secs  = timeval.tv_sec;
-  *usecs = timeval.tv_usec;
+  t.secs  = timeval.tv_sec;
+  t.usecs = timeval.tv_usec;
 }
 
 void
 COSTime::
-diffHRTime(int secs1, int usecs1, int secs2, int usecs2, int *dsecs, int *dusecs)
+diffHRTime(long secs1, long usecs1, long secs2, long usecs2, long *dsecs, long *dusecs)
 {
   *dusecs = (secs2 - secs1)*1000000 + (usecs2 - usecs1);
 
@@ -171,16 +170,16 @@ diffHRTime(int secs1, int usecs1, int secs2, int usecs2, int *dsecs, int *dusecs
 
 void
 COSTime::
-diffHRTime(int secs1, int usecs1, int secs2, int usecs2, int *dusecs)
+diffHRTime(long secs1, long usecs1, long secs2, long usecs2, long *dusecs)
 {
   *dusecs = (secs2 - secs1)*1000000 + (usecs2 - usecs1);
 }
 
 void
 COSTime::
-diffHRTime(int secs1, int usecs1, int secs2, int usecs2, double *dsecs)
+diffHRTime(long secs1, long usecs1, long secs2, long usecs2, double *dsecs)
 {
-  int dusecs = (secs2 - secs1)*1000000 + (usecs2 - usecs1);
+  long dusecs = (secs2 - secs1)*1000000 + (usecs2 - usecs1);
 
   *dsecs = dusecs / 100000.0;
 }
