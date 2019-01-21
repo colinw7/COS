@@ -23,6 +23,7 @@ namespace COSTime {
   CHRTime diffHRTime(const CHRTime &time1, const CHRTime &time2);
 
   void getHRTime(CHRTime &t);
+  void getHRTime(long *secs, long *usecs);
 
   void diffHRTime(long secs1, long usecs1, long secs2, long usecs2, long *decs, long *dusecs);
   void diffHRTime(long secs1, long usecs1, long secs2, long usecs2, long *dusecs);

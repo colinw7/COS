@@ -135,6 +135,16 @@ getHRTime()
   return hrtime;
 }
 
+void
+COSTime::
+getHRTime(long *secs, long *usecs)
+{
+  CHRTime t = getHRTime();
+
+  *secs  = t.secs;
+  *usecs = t.usecs;
+}
+
 CHRTime
 COSTime::
 diffHRTime(const CHRTime &hrtime1, const CHRTime &hrtime2)
