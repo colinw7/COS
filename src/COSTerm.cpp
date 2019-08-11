@@ -318,8 +318,9 @@ getColorStrs()
     if ((term = getenv("TERM")) == nullptr)
       term = "vt100";
 
-    if      (strcmp(term, "xterm"      ) == 0 ||
-             strcmp(term, "xterm-color") == 0) {
+    if      (strcmp(term, "xterm"         ) == 0 ||
+             strcmp(term, "xterm-color"   ) == 0 ||
+             strcmp(term, "xterm-256color") == 0) {
       bool colored = true;
 
       char *color_xterm;
