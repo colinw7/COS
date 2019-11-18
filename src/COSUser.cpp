@@ -417,7 +417,7 @@ getUserHome(uint uid)
   std::string home_dir;
 
   if (! getUserHome(uid, home_dir)) {
-    setErrorMsg("Unknown user id: " + uid);
+    setErrorMsg("Unknown user id: " + std::to_string(uid));
 
     return "/";
   }
