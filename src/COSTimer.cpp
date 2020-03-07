@@ -1,6 +1,7 @@
 #include <COSTimer.h>
 
 #include <std_os.h>
+#include <unistd.h>
 
 #include <time.h>
 #include <cerrno>
@@ -9,7 +10,7 @@
 
 uint
 COSTimer::
-sleep(uint secs)
+ssleep(uint secs)
 {
 #if OS_UNIX
   // TODO: use nanosleep or clock_nanosleep (linux)

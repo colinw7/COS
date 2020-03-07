@@ -8,8 +8,8 @@ struct CHRTime {
   long secs  { 0 };
   long usecs { 0 };
 
-  CHRTime(long secs=0, long usecs=0) :
-   secs(secs), usecs(usecs) {
+  CHRTime(long isecs=0, long iusecs=0) :
+   secs(isecs), usecs(iusecs) {
   }
 
   friend std::ostream &operator<<(std::ostream &os, const CHRTime &hrtime) {

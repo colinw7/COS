@@ -4,7 +4,7 @@
 #include <sys/types.h>
 
 namespace COSTimer {
-  uint sleep(uint secs);
+  uint ssleep(uint secs);
 
   uint micro_sleep(uint msecs);
   uint milli_sleep(uint msecs);
