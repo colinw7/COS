@@ -18,11 +18,19 @@ COSTime::
 getFTime()
 {
 #if OS_UNIX
+#if 0
   struct timeb tp;
 
   ftime(&tp);
 
   return tp.time + tp.millitm/1000.0;
+#else
+  struct timeval timeval;
+
+  gettimeofday(&timeval, 0);
+
+  return timeval.tv_sec + timeval.tv_usec/1000.0;
+#endif
 #else
   std::cerr << "COSTime::getFTime: Unimplemented" << std::endl;
 
