@@ -22,10 +22,7 @@ extern "C" {
 #define HAS_POSIX_OPENPT 1
 
 COSPty::
-COSPty() :
- master_fd_   (-1),
- slave_fd_    (-1),
- save_termios_(NULL)
+COSPty()
 {
 }
 

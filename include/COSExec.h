@@ -26,8 +26,9 @@ namespace COSExec {
   void grabOutput  (bool std_out=true, bool std_err=true);
   void ungrabOutput();
 
-  bool checkGrabbedOutput(uint msecs);
-  void readGrabbedOutput(std::string &str);
+  bool checkGrabbedOutput(uint msecs=10);
+
+  void readGrabbedOutput(std::string &str, uint msecs=10);
 
   void grabStdout  (COSExecData *exec_data);
   void ungrabStdout(COSExecData *exec_data);

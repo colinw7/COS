@@ -13,6 +13,7 @@ enum CPtyState {
   CPTY_CBREAK
 };
 
+//! class to handle read/write to/from slave pseudo terminal
 class COSPty {
  public:
   COSPty();
@@ -69,10 +70,10 @@ class COSPty {
 
  private:
   std::string     masterName_;
-  int             master_fd_;
+  int             master_fd_    { -1 };
   std::string     slaveName_;
-  int             slave_fd_;
-  struct termios *save_termios_;
+  int             slave_fd_     { -1 };
+  struct termios *save_termios_ { nullptr };
 };
 
 #endif

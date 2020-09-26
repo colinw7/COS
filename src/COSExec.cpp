@@ -51,30 +51,29 @@ checkGrabbedOutput(uint msecs)
 
 void
 COSExec::
-readGrabbedOutput(std::string &str)
+readGrabbedOutput(std::string &str, uint msecs)
 {
-  int  num_read;
-  char buffer[512];
-
   str = "";
 
-  buffer[0] = '\0';
-
   if (cos_exec_data.pipes[0] != -1) {
-    if (COSRead::wait_read(&cos_exec_data.pipes[0], 1, 0, 10)) {
-      while ((num_read = ::read(cos_exec_data.pipes[0], buffer, 511)) != -1) {
-        buffer[num_read] = '\0';
+    //fsync(cos_exec_data.pipes[0]);
 
-        str += buffer;
-      }
+    if (COSRead::wait_read(&cos_exec_data.pipes[0], 1, 0, msecs)) {
+      std::string str1;
+
+      (void) COSRead::read(cos_exec_data.pipes[0], str1);
+
+      str += str1;
     }
 
-    if (COSRead::wait_read(&cos_exec_data.pipes[1], 1, 0, 10)) {
-      while ((num_read = ::read(cos_exec_data.pipes[1], buffer, 511)) != -1) {
-        buffer[num_read] = '\0';
+    //fsync(cos_exec_data.pipes[1]);
 
-        str += buffer;
-      }
+    if (COSRead::wait_read(&cos_exec_data.pipes[1], 1, 0, msecs)) {
+      std::string str1;
+
+      (void) COSRead::read(cos_exec_data.pipes[1], str1);
+
+      str += str1;
     }
   }
 }

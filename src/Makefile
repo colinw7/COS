@@ -13,6 +13,7 @@ all: $(LIB_DIR)/libCOS.a
 
 SRC = \
 COSErr.cpp \
+COSExec.cpp \
 COSFile.cpp \
 COSLimit.cpp \
 COSNaN.cpp \
