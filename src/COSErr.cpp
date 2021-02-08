@@ -47,7 +47,7 @@ outputError(bool useErr, int err, bool flushStdout, const char *format, va_list 
 {
   enum { BUF_SIZE = 500 };
 
-  char buf[2*BUF_SIZE], userMsg[BUF_SIZE], errText[BUF_SIZE];
+  char buf[2*BUF_SIZE + 32], userMsg[BUF_SIZE], errText[BUF_SIZE];
 
   vsnprintf(userMsg, BUF_SIZE, format, ap);
 
