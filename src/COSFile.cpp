@@ -84,7 +84,7 @@ openDir(const std::string &dirname)
       setErrorMsg("Failed to Open Directory");
   }
 
-  return (void *) dir;
+  return static_cast<void *>(dir);
 #else
   int handle = -1;
 
@@ -97,7 +97,7 @@ COSFile::
 readDir(void *handle, std::string &filename)
 {
 #ifdef OS_UNIX
-  DIR *dir = (DIR *) handle;
+  DIR *dir = static_cast<DIR *>(handle);
 
   if (dir == NULL)
     return false;
@@ -154,7 +154,7 @@ COSFile::
 closeDir(void *handle)
 {
 #ifdef OS_UNIX
-  DIR *dir = (DIR *) handle;
+  DIR *dir = static_cast<DIR *>(handle);
 
   closedir(dir);
 
@@ -567,7 +567,7 @@ COSFile::
 makeDir(const std::string &dirname, int mode)
 {
 #ifdef OS_UNIX
-  int error = mkdir(dirname.c_str(), (mode_t) mode);
+  int error = mkdir(dirname.c_str(), static_cast<mode_t>(mode));
 #else
   int error = mkdir(dirname.c_str());
 #endif
@@ -644,7 +644,7 @@ getLinkedFile(const std::string &filename, std::string &linked_filename)
 
   buffer[0] = '\0';
 
-  int len = readlink(filename.c_str(), buffer, MAXPATHLEN);
+  auto len = readlink(filename.c_str(), buffer, MAXPATHLEN);
 
   if (len >= 0)
     buffer[len] = '\0';
@@ -669,7 +669,7 @@ COSFile::
 createFile(const std::string &filename, int mode, int *fd)
 {
 #ifdef OS_UNIX
-  *fd = creat(filename.c_str(), (mode_t) mode);
+  *fd = creat(filename.c_str(), static_cast<mode_t>(mode));
 #else
   *fd = creat(filename.c_str(), mode);
 #endif
@@ -685,7 +685,7 @@ COSFile::
 chmodFile(const std::string &filename, int mode)
 {
 #ifdef OS_UNIX
-  int error = chmod(filename.c_str(), (mode_t) mode);
+  int error = chmod(filename.c_str(), static_cast<mode_t>(mode));
 
   if (error != 0)
     return false;
@@ -703,7 +703,7 @@ COSFile::
 chownFile(const std::string &filename, int uid, int gid)
 {
 #ifdef OS_UNIX
-  int error = chown(filename.c_str(), (uid_t) uid, (gid_t) gid);
+  int error = chown(filename.c_str(), static_cast<uid_t>(uid), static_cast<gid_t>(gid));
 
   if (error != 0)
     return false;
@@ -721,11 +721,11 @@ COSFile::
 fileCntrl(int fd, int cmd, void *arg)
 {
 #ifdef OS_UNIX
-  switch ((int) cmd) {
+  switch (cmd) {
     case F_DUPFD: {
-      int *arg1 = (int *) arg;
+      int *arg1 = static_cast<int *>(arg);
 
-      *arg1 = ::fcntl((int) fd, (int) cmd, *arg1);
+      *arg1 = ::fcntl(fd, cmd, *arg1);
 
       if (*arg1 == -1)
         return false;
@@ -737,9 +737,9 @@ fileCntrl(int fd, int cmd, void *arg)
 #ifdef F_GETOWN
     case F_GETOWN: {
 #endif
-      int *arg1 = (int *) arg;
+      int *arg1 = static_cast<int *>(arg);
 
-      *arg1 = ::fcntl((int) fd, (int) cmd);
+      *arg1 = ::fcntl(fd, cmd);
 
       if (*arg1 == -1)
         return false;
@@ -751,7 +751,7 @@ fileCntrl(int fd, int cmd, void *arg)
 #ifdef F_SETOWN
     case F_SETOWN: {
 #endif
-      int error = ::fcntl((int) fd, (int) cmd, arg);
+      int error = ::fcntl(fd, cmd, arg);
 
       if (error == -1)
         return false;
@@ -761,7 +761,7 @@ fileCntrl(int fd, int cmd, void *arg)
     case F_SETLK:
     case F_SETLKW:
     case F_GETLK: {
-      int error = ::fcntl((int) fd, (int) cmd, (struct flock *) arg);
+      int error = ::fcntl(fd, cmd, static_cast<struct flock *>(arg));
 
       if (error == -1)
         return false;
@@ -860,7 +860,7 @@ maxFileNameLength()
   _getcwd(dirname, MAXPATHLEN);
 #endif
 
-  return pathconf(dirname, _PC_NAME_MAX);
+  return uint(pathconf(dirname, _PC_NAME_MAX));
 }
 
 //------
