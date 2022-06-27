@@ -18,25 +18,25 @@ struct CHRTime {
     return os;
   }
 
-  double getSecs () const { return         secs + usecs/1000000.0; }
-  double getMSecs() const { return    1000*secs + usecs/1000.0   ; }
-  double getUSecs() const { return 1000000*secs + usecs          ; }
+  double getSecs () const { return           double(secs) + double(usecs)/1000000.0; }
+  double getMSecs() const { return    1000.0*double(secs) + double(usecs)/1000.0   ; }
+  double getUSecs() const { return 1000000.0*double(secs) + double(usecs)          ; }
 
   void setSecs(double t) {
-    secs  = t;
+    secs  = long(t);
     usecs = 0;
   }
 
   void setMSecs(double t) {
     secs  = 0;
-    usecs = t*1000;
+    usecs = long(t*1000);
 
     normalize();
   }
 
   void setUSecs(double t) {
     secs  = 0;
-    usecs = t;
+    usecs = long(t);
 
     normalize();
   }

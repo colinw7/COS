@@ -29,7 +29,7 @@ int
 COSRand::
 rand()
 {
-  return lrand48();
+  return int(lrand48());
 }
 
 int
@@ -37,6 +37,15 @@ COSRand::
 randIn(int min_val, int max_val)
 {
   int number = (abs(rand()) % (max_val - min_val + 1)) + min_val;
+
+  return std::min(std::max(number, min_val), max_val);
+}
+
+long
+COSRand::
+randIn(long min_val, long max_val)
+{
+  long number = (abs(rand()) % (max_val - min_val + 1)) + min_val;
 
   return std::min(std::max(number, min_val), max_val);
 }
