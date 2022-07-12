@@ -33,17 +33,17 @@ checkGrabbedOutput(uint msecs)
   if      (cos_exec_data.pipes[0] != -1 && cos_exec_data.pipes[1] != -1) {
     int fds[2] = { cos_exec_data.pipes[0], cos_exec_data.pipes[1] };
 
-    return COSRead::wait_read(fds, 2, 0, msecs);
+    return COSRead::wait_read(fds, 2, 0, int(msecs));
   }
   else if (cos_exec_data.pipes[0] != -1) {
     int fds[1] = { cos_exec_data.pipes[0] };
 
-    return COSRead::wait_read(fds, 1, 0, msecs);
+    return COSRead::wait_read(fds, 1, 0, int(msecs));
   }
   else if (cos_exec_data.pipes[1] != -1) {
     int fds[2] = { cos_exec_data.pipes[1] };
 
-    return COSRead::wait_read(fds, 1, 0, msecs);
+    return COSRead::wait_read(fds, 1, 0, int(msecs));
   }
   else
     return false;
@@ -58,7 +58,7 @@ readGrabbedOutput(std::string &str, uint msecs)
   if (cos_exec_data.pipes[0] != -1) {
     //fsync(cos_exec_data.pipes[0]);
 
-    if (COSRead::wait_read(&cos_exec_data.pipes[0], 1, 0, msecs)) {
+    if (COSRead::wait_read(&cos_exec_data.pipes[0], 1, 0, int(msecs))) {
       std::string str1;
 
       (void) COSRead::read(cos_exec_data.pipes[0], str1);
@@ -68,12 +68,42 @@ readGrabbedOutput(std::string &str, uint msecs)
 
     //fsync(cos_exec_data.pipes[1]);
 
-    if (COSRead::wait_read(&cos_exec_data.pipes[1], 1, 0, msecs)) {
+    if (COSRead::wait_read(&cos_exec_data.pipes[1], 1, 0, int(msecs))) {
       std::string str1;
 
       (void) COSRead::read(cos_exec_data.pipes[1], str1);
 
       str += str1;
+    }
+  }
+}
+
+void
+COSExec::
+readGrabbedOutput(std::string &ostr, std::string &estr, uint msecs)
+{
+  ostr = "";
+  estr = "";
+
+  if (cos_exec_data.pipes[0] != -1) {
+    //fsync(cos_exec_data.pipes[0]);
+
+    if (COSRead::wait_read(&cos_exec_data.pipes[0], 1, 0, int(msecs))) {
+      std::string str1;
+
+      (void) COSRead::read(cos_exec_data.pipes[0], str1);
+
+      ostr += str1;
+    }
+
+    //fsync(cos_exec_data.pipes[1]);
+
+    if (COSRead::wait_read(&cos_exec_data.pipes[1], 1, 0, int(msecs))) {
+      std::string str1;
+
+      (void) COSRead::read(cos_exec_data.pipes[1], str1);
+
+      estr += str1;
     }
   }
 }
@@ -159,4 +189,18 @@ closePipes(COSExecData *exec_data)
 
   exec_data->pipes[0] = -1;
   exec_data->pipes[1] = -1;
+}
+
+int
+COSExec::
+getSaveStdOut()
+{
+  return cos_exec_data.save_stdout;
+}
+
+int
+COSExec::
+getSaveStdErr()
+{
+  return cos_exec_data.save_stderr;
 }

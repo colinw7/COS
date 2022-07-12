@@ -6,11 +6,10 @@
 
 struct COSExecData {
   int pipes[2];
-  int save_stdout;
-  int save_stderr;
+  int save_stdout { -1 };
+  int save_stderr { -1 };
 
-  COSExecData() :
-   save_stdout(0), save_stderr() {
+  COSExecData() {
     init();
   }
 
@@ -29,6 +28,7 @@ namespace COSExec {
   bool checkGrabbedOutput(uint msecs=10);
 
   void readGrabbedOutput(std::string &str, uint msecs=10);
+  void readGrabbedOutput(std::string &ostr, std::string &estr, uint msecs=10);
 
   void grabStdout  (COSExecData *exec_data);
   void ungrabStdout(COSExecData *exec_data);
@@ -36,6 +36,9 @@ namespace COSExec {
   void ungrabStderr(COSExecData *exec_data);
   void openPipes   (COSExecData *exec_data);
   void closePipes  (COSExecData *exec_data);
+
+  int getSaveStdOut();
+  int getSaveStdErr();
 }
 
 #endif
