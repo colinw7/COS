@@ -129,7 +129,6 @@ waitAnyProcess(pid_t *pid, int *status)
   return true;
 #else
   std::cerr << "COSProcess::waitAnyProcess: Unimplemented" << std::endl;
-
   return false;
 #endif
 }
@@ -149,7 +148,6 @@ waitProcess(pid_t *pid, int options, int *status)
   return true;
 #else
   std::cerr << "COSProcess::waitProcess: Unimplemented" << std::endl;
-
   return false;
 #endif
 }
@@ -170,11 +168,11 @@ system(const char *command)
   // TODO: fail if SIGCHLD is set to SIG_IGN
 
   /* Block SIGCHLD */
-  COSSignal::blockSignal(SIGCHLD); sigset_t origMask = COSSignal::getOldSigSet();
+  COSSignal::blockSignal(SIGCHLD); auto origMask = COSSignal::getOldSigSet();
 
   /* Ignore SIGINT and SIGQUIT */
-  COSSignal::ignoreSignal(SIGINT ); struct sigaction saOrigInt  = COSSignal::getOldSigAction();
-  COSSignal::ignoreSignal(SIGQUIT); struct sigaction saOrigQuit = COSSignal::getOldSigAction();
+  COSSignal::ignoreSignal(SIGINT ); auto saOrigInt  = COSSignal::getOldSigAction();
+  COSSignal::ignoreSignal(SIGQUIT); auto saOrigQuit = COSSignal::getOldSigAction();
 
   int status = 0;
 
@@ -207,7 +205,7 @@ system(const char *command)
       //  setenv("PATH", path, /*overwrite*/1);
       //  execlp("sh", "sh", "-c", command, (char *) 0);
 
-      execl("/bin/sh", "sh", "-c", command, (char *) 0);
+      execl("/bin/sh", "sh", "-c", command, nullptr);
 
       _exit(127); /* We could not exec the shell */
     }
@@ -256,7 +254,6 @@ fork()
   return error;
 #else
   std::cerr << "COSProcess::fork: Unimplemented" << std::endl;
-
   return 0;
 #endif
 }
@@ -282,7 +279,6 @@ pipe(int *ifd, int *ofd)
   return true;
 #else
   std::cerr << "COSProcess::pipe: Unimplemented" << std::endl;
-
   return false;
 #endif
 }
@@ -306,15 +302,13 @@ executeCommand(const std::string &command, std::string &output, CommandState *st
 {
   output = "";
 
-  FILE *fp = openProcess(command, "r");
-
-  if (! fp)
-    return false;
+  auto *fp = openProcess(command, "r");
+  if (! fp) return false;
 
   int c;
 
   while ((c = fgetc(fp)) != EOF)
-    output += c;
+    output += char(c);
 
   bool rc = closeProcess(fp);
 
@@ -329,7 +323,7 @@ COSProcess::
 openProcess(const std::string &command, const std::string &mode)
 {
 #ifdef OS_UNIX
-  FILE *fp = popen(command.c_str(), mode.c_str());
+  auto *fp = popen(command.c_str(), mode.c_str());
 
   return fp;
 #else
