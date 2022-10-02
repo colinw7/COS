@@ -34,7 +34,7 @@ signames[] = {
   { SIGTTOU , "No TTY for Output"        },
   { SIGWINCH, "Window Resized"           },
   { SIGSEGV , "segmentation Fault"       },
-  {       0 , NULL                       }
+  {       0 , nullptr                    }
 };
 
 std::string
@@ -49,7 +49,7 @@ COSSignal::
 signal_to_string(int sig)
 {
 #ifndef __linux__
-  for (uint i = 0; signames[i].name != NULL; ++i)
+  for (uint i = 0; signames[i].name != nullptr; ++i)
     if (signame[i].num == sig)
       return signames[i].name;
 
@@ -63,14 +63,14 @@ int
 COSSignal::
 string_to_signal(const std::string &name)
 {
-  uint len = name.size();
+  auto len = name.size();
 
   std::string name1 = name;
 
   for (uint i = 0; i < len; ++i)
-    name1[i] = tolower(name[i]);
+    name1[i] = char(tolower(name[i]));
 
-  for (uint i = 0; signames[i].name != NULL; ++i)
+  for (uint i = 0; signames[i].name != nullptr; ++i)
     if (signames[i].name == name1)
       return signames[i].num;
 

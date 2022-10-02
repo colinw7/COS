@@ -49,7 +49,7 @@ close_files(const std::set<int> &skip_fds)
   // replace stdout with stderr
   dup2(STDERR_FILENO, STDOUT_FILENO);
 
-  int num_fds = (int) sysconf(_SC_OPEN_MAX);
+  int num_fds = int(sysconf(_SC_OPEN_MAX));
 
   for (int i = STDERR_FILENO + 1; i < num_fds; ++i) {
     if (skip_fds.find(i) == skip_fds.end())
@@ -305,21 +305,21 @@ set_raw(int fd, struct termios *t)
   struct termios t1 = *t;
 
   /* echo off, canonical mode off, extended input processing off, signal chars off */
-  t1.c_lflag &= ~(ECHO | ICANON | IEXTEN | ISIG);
+  t1.c_lflag &= uint(~(ECHO | ICANON | IEXTEN | ISIG));
 
   /* no SIGINT on BREAK, CR-to-NL off, input parity check off, don't strip 8th bit on input,
      output flow control off */
-//t1.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
-  t1.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON | IGNBRK | IGNCR | INLCR | PARMRK);
+//t1.c_iflag &= uint(~(BRKINT | ICRNL | INPCK | ISTRIP | IXON));
+  t1.c_iflag &= uint(~(BRKINT | ICRNL | INPCK | ISTRIP | IXON | IGNBRK | IGNCR | INLCR | PARMRK));
 
   /* clear size bits, parity checking off */
-  t1.c_cflag &= ~(CSIZE | PARENB);
+  t1.c_cflag &= uint(~(CSIZE | PARENB));
 
   /* set 8 bits/char */
   t1.c_cflag |= CS8;
 
   /* output processing off */
-  t1.c_oflag &= ~OPOST;
+  t1.c_oflag &= uint(~OPOST);
 
   t1.c_cc[VMIN ] = 1; /* Case B: 1 byte at a time, no timer */
   t1.c_cc[VTIME] = 0;
@@ -345,13 +345,13 @@ set_cbreak(int fd, struct termios *t)
   struct termios t1 = *t;
 
   /* echo off, canonical mode off */
-  t1.c_lflag &= ~(ECHO | ICANON);
+  t1.c_lflag &= uint(~(ECHO | ICANON));
 
   /* signals on */
   t1.c_lflag |= ISIG;
 
   /* CR-to-NL off */
-  t1.c_iflag &= ~ICRNL;
+  t1.c_iflag &= uint(~ICRNL);
 
   t1.c_cc[VMIN ] = 1; /* Case B: 1 byte at a time, no timer */
   t1.c_cc[VTIME] = 0;

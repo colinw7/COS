@@ -18,7 +18,7 @@ getUserId()
   if (! getUserId(&uid)) {
     setErrorMsg("Invalid User");
 
-    return ~0;
+    return uint(~0);
   }
 
   return uid;
@@ -42,7 +42,7 @@ getUserId(const std::string &name)
   if (! getUserId(name, &uid)) {
     setErrorMsg("Invalid User Name: " + name);
 
-    return ~0;
+    return uint(~0);
   }
 
   return uid;
@@ -53,9 +53,9 @@ COSUser::
 getUserId(const std::string &name, uint *uid)
 {
 #ifdef OS_UNIX
-  struct passwd *pw = getpwnam((char *) name.c_str());
+  struct passwd *pw = getpwnam(const_cast<char *>(name.c_str()));
 
-  if (pw == NULL)
+  if (pw == nullptr)
     return false;
 
   *uid = pw->pw_uid;
@@ -77,7 +77,7 @@ getEffectiveUserId()
   if (! getEffectiveUserId(&uid)) {
     setErrorMsg("Invalid User");
 
-    return ~0;
+    return uint(~0);
   }
 
   return uid;
@@ -178,14 +178,14 @@ COSUser::
 getUserName(uint uid, std::string &name)
 {
 #ifdef OS_UNIX
-  struct passwd *pw = getpwuid((uid_t) uid);
+  struct passwd *pw = getpwuid(uid_t(uid));
 
-  if (pw != NULL)
+  if (pw != nullptr)
     name = pw->pw_name;
   else {
     char *name1 = getlogin();
 
-    if (name1 != NULL)
+    if (name1 != nullptr)
       name = name1;
     else {
       char buffer[32];
@@ -304,9 +304,9 @@ COSUser::
 getUserDesc(uint uid, std::string &desc)
 {
 #ifdef OS_UNIX
-  struct passwd *pw = getpwuid((uid_t) uid);
+  struct passwd *pw = getpwuid(uid_t(uid));
 
-  if (pw != NULL) {
+  if (pw != nullptr) {
     desc = pw->pw_gecos;
 
     return true;
@@ -430,9 +430,9 @@ COSUser::
 getUserHome(uint uid, std::string &home_dir)
 {
 #ifdef OS_UNIX
-  struct passwd *pw = getpwuid((uid_t) uid);
+  struct passwd *pw = getpwuid(uid_t(uid));
 
-  if (pw != NULL) {
+  if (pw != nullptr) {
     home_dir = pw->pw_dir;
 
     return true;
@@ -442,12 +442,12 @@ getUserHome(uint uid, std::string &home_dir)
 #else
   char *home_env = getenv("HOME");
 
-  if (home_env != NULL) {
+  if (home_env != nullptr) {
     if (! CFile::isDirectory(home_env))
-      home_env = NULL;
+      home_env = nullptr;
   }
 
-  if (home_env == NULL)
+  if (home_env == nullptr)
     home_env = "/";
 
   home_dir = home_env;
@@ -466,7 +466,7 @@ getUserGroupId()
   uint uid;
 
   if (! getUserId(&uid))
-    return ~0;
+    return uint(~0);
 
   return getUserGroupId(uid);
 }
@@ -478,7 +478,7 @@ getEffectiveUserGroupId()
   uint uid;
 
   if (! getEffectiveUserId(&uid))
-    return ~0;
+    return uint(~0);
 
   return getUserGroupId(uid);
 }
@@ -495,9 +495,9 @@ COSUser::
 getUserGroupId(uint uid)
 {
 #ifdef OS_UNIX
-  struct passwd *pw = getpwuid((uid_t) uid);
+  struct passwd *pw = getpwuid(uid_t(uid));
 
-  if (pw != NULL)
+  if (pw != nullptr)
     return pw->pw_gid;
   else
     return 0;
@@ -542,9 +542,9 @@ COSUser::
 getUserShell(uint uid)
 {
 #ifdef OS_UNIX
-  struct passwd *pw = getpwuid((uid_t) uid);
+  struct passwd *pw = getpwuid(uid_t(uid));
 
-  if (pw != NULL)
+  if (pw != nullptr)
     return pw->pw_shell;
   else
     return "/bin/sh";
@@ -562,7 +562,7 @@ getGroupId()
   if (! getGroupId(&gid)) {
     setErrorMsg("Invalid Group");
 
-    return ~0;
+    return uint(~0);
   }
 
   return gid;
@@ -590,7 +590,7 @@ getGroupId(const std::string &name)
   if (! getGroupId(name, &gid)) {
     setErrorMsg("Invalid Group Name: " + name);
 
-    return ~0;
+    return uint(~0);
   }
 
   return gid;
@@ -601,9 +601,9 @@ COSUser::
 getGroupId(const std::string &name, uint *gid)
 {
 #ifdef OS_UNIX
-  struct group *gr = getgrnam((char *) name.c_str());
+  struct group *gr = getgrnam(const_cast<char *>(name.c_str()));
 
-  if (gr == NULL)
+  if (gr == nullptr)
     return false;
 
   *gid = gr->gr_gid;
@@ -621,9 +621,9 @@ COSUser::
 isGroupName(const std::string &name)
 {
 #ifdef OS_UNIX
-  struct group *gr = getgrnam((char *) name.c_str());
+  struct group *gr = getgrnam(const_cast<char *>(name.c_str()));
 
-  return (gr != NULL);
+  return (gr != nullptr);
 #else
   return false;
 #endif
@@ -641,11 +641,11 @@ COSUser::
 getGroupName(uint gid)
 {
 #ifdef OS_UNIX
-  struct group *gr = getgrgid((gid_t) gid);
+  struct group *gr = getgrgid(gid_t(gid));
 
   std::string group_name;
 
-  if (gr != NULL)
+  if (gr != nullptr)
     group_name = gr->gr_name;
   else {
     char buffer[32];
@@ -677,7 +677,7 @@ COSUser::
 setUMask(uint mask)
 {
 #ifdef OS_UNIX
-  umask((mode_t) mask);
+  umask(mode_t(mask));
 
   return true;
 #else
@@ -742,7 +742,7 @@ getUsers(std::vector<std::string> &names)
 
   struct passwd *pwent = getpwent();
 
-  while (pwent != NULL) {
+  while (pwent != nullptr) {
     names.push_back(pwent->pw_name);
 
     pwent = getpwent();
@@ -762,7 +762,7 @@ getShellName()
 {
   const char *shell = getenv("SHELL");
 
-  if (shell == NULL || *shell == '\0')
+  if (shell == nullptr || *shell == '\0')
     shell = "/bin/sh";
 
   return shell;

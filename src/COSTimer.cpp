@@ -15,7 +15,7 @@ ssleep(uint secs)
 #if OS_UNIX
   // TODO: use nanosleep or clock_nanosleep (linux)
 
-  int remain = sleep((uint) secs);
+  auto remain = sleep(uint(secs));
 
   return remain;
 #else

@@ -214,14 +214,14 @@ setCharSize(int fd, int rows, int cols)
     return false;
 
   if (ts.ws_col != 0)
-    ts.ws_xpixel = cols*(ts.ws_xpixel/ts.ws_col);
+    ts.ws_xpixel = ushort(cols*(ts.ws_xpixel/ts.ws_col));
   if (ts.ws_row != 0)
-    ts.ws_ypixel = rows*(ts.ws_ypixel/ts.ws_row);
+    ts.ws_ypixel = ushort(rows*(ts.ws_ypixel/ts.ws_row));
 
-  ts.ws_row = rows;
-  ts.ws_col = cols;
+  ts.ws_row = ushort(rows);
+  ts.ws_col = ushort(cols);
 
-  ioctl(fd, TIOCSWINSZ, (char *) &ts);
+  ioctl(fd, TIOCSWINSZ, reinterpret_cast<char *>(&ts));
 
   return true;
 }
@@ -263,14 +263,14 @@ setPixelSize(int fd, int width, int height)
     return false;
 
   if (ts.ws_xpixel != 0)
-    ts.ws_row = (width *ts.ws_col)/ts.ws_xpixel;
+    ts.ws_row = ushort((width *ts.ws_col)/ts.ws_xpixel);
   if (ts.ws_ypixel != 0)
-    ts.ws_col = (height*ts.ws_row)/ts.ws_ypixel;
+    ts.ws_col = ushort((height*ts.ws_row)/ts.ws_ypixel);
 
-  ts.ws_xpixel = width;
-  ts.ws_ypixel = height;
+  ts.ws_xpixel = ushort(width);
+  ts.ws_ypixel = ushort(height);
 
-  ioctl(fd, TIOCSWINSZ, (char *) &ts);
+  ioctl(fd, TIOCSWINSZ, reinterpret_cast<char *>(&ts));
 
   return true;
 }
@@ -286,12 +286,12 @@ getNumColumns()
   if ((term = getenv("TERM")) == nullptr)
     term = "vt100";
 
-  int no = tgetent(term_buffer, (char *) term);
+  int no = tgetent(term_buffer, const_cast<char *>(term));
 
   if (no <= 0)
     return 0;
 
-  int cols = tgetnum((char *) "cols");
+  int cols = tgetnum(const_cast<char *>("cols"));
 
   return cols;
 }
@@ -361,7 +361,7 @@ cgets(std::string &buf)
   tcgetattr(fileno(stdin), &init);
 
   newsettings              = init;
-  newsettings.c_lflag     &= ~(ICANON | ECHO);
+  newsettings.c_lflag     &= uint(~(ICANON | ECHO));
   newsettings.c_cc[VMIN ]  = 1;
   newsettings.c_cc[VTIME]  = 0;
 

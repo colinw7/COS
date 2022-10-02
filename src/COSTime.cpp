@@ -29,7 +29,7 @@ getFTime()
 
   gettimeofday(&timeval, 0);
 
-  return timeval.tv_sec + timeval.tv_usec/1000.0;
+  return double(timeval.tv_sec) + double(timeval.tv_usec)/1000.0;
 #endif
 #else
   std::cerr << "COSTime::getFTime: Unimplemented" << std::endl;
@@ -199,7 +199,7 @@ diffHRTime(long secs1, long usecs1, long secs2, long usecs2, double *dsecs)
 {
   long dusecs = (secs2 - secs1)*1000000 + (usecs2 - usecs1);
 
-  *dsecs = dusecs / 100000.0;
+  *dsecs = double(dusecs)/100000.0;
 }
 
 
@@ -212,11 +212,11 @@ getElapsedCPU()
 
   clock_t elapsed = times(&atms);
 
-  return elapsed;
+  return uint(elapsed);
 #else
   clock_t elapsed = clock();
 
-  return elapsed;
+  return uint(elapsed);
 #endif
 }
 
@@ -233,11 +233,11 @@ getUserCPU()
 
   long ticks = sysconf(_SC_CLK_TCK);
 
-  return atms.tms_utime/double(ticks);
+  return double(atms.tms_utime)/double(ticks);
 #else
   clock_t elapsed = clock();
 
-  return elapsed/double(CLOCKS_PER_SEC);
+  return double(elapsed)/double(CLOCKS_PER_SEC);
 #endif
 }
 
@@ -254,10 +254,10 @@ getSystemCPU()
 
   long ticks = sysconf(_SC_CLK_TCK);
 
-  return atms.tms_stime/double(ticks);
+  return double(atms.tms_stime)/double(ticks);
 #else
   clock_t elapsed = clock();
 
-  return elapsed/double(CLOCKS_PER_SEC);
+  return double(elapsed)/double(CLOCKS_PER_SEC);
 #endif
 }

@@ -154,7 +154,7 @@ read(int fd, std::string &str)
   ssize_t m = sizeof(buffer) - 1;
 
   while (true) {
-    ssize_t n = ::read(fd, buffer, m);
+    ssize_t n = ::read(fd, buffer, size_t(m));
 
     if (n == -1) {
       if (errno == EINTR)
@@ -181,7 +181,7 @@ read(int fd, std::string &str)
 ssize_t
 readall(int fd, void *buffer, size_t n)
 {
-  char *buf = (char *) buffer;
+  char *buf = reinterpret_cast<char *>(buffer);
 
   size_t totRead = 0;
 
@@ -189,7 +189,7 @@ readall(int fd, void *buffer, size_t n)
     ssize_t numRead = read(fd, buf, n - totRead);
 
     if (numRead == 0) /* EOF */
-      return totRead; /* May be 0 if this is first read() */
+      return ssize_t(totRead); /* May be 0 if this is first read() */
 
     if (numRead == -1) {
       if (errno == EINTR)
@@ -198,11 +198,11 @@ readall(int fd, void *buffer, size_t n)
         return -1;              /* Some other error */
     }
 
-    totRead += numRead;
+    totRead += size_t(numRead);
     buf     += numRead;
   }
 
-  return totRead; /* Must be 'n' bytes if we get here */
+  return ssize_t(totRead); /* Must be 'n' bytes if we get here */
 }
 
 bool
@@ -220,14 +220,14 @@ write(int fd, const std::string &str)
 {
   ssize_t n = writeall(fd, str.c_str(), str.size());
 
-  return (n == (ssize_t) str.size());
+  return (n == ssize_t(str.size()));
 }
 
 ssize_t
 COSRead::
 writeall(int fd, const void *buf, size_t count_in)
 {
-  const char *buf1 = (const char *) buf;
+  const char *buf1 = reinterpret_cast<const char *>(buf);
 
   size_t count_out = 0;
 
@@ -243,11 +243,11 @@ writeall(int fd, const void *buf, size_t count_in)
         return -1; /* Some other error */
     }
 
-    count_out += n;
+    count_out += size_t(n);
     buf1      += n;
   }
 
-  return count_out;
+  return ssize_t(count_out);
 }
 
 //---------------
