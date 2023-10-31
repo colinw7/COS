@@ -27,7 +27,7 @@ getFTime()
 #else
   struct timeval timeval;
 
-  gettimeofday(&timeval, 0);
+  gettimeofday(&timeval, nullptr);
 
   return double(timeval.tv_sec) + double(timeval.tv_usec)/1000.0;
 #endif
@@ -42,7 +42,7 @@ std::string
 COSTime::
 getTimeString(const std::string &format)
 {
-  time_t t = time(0);
+  time_t t = time(nullptr);
 
   return getTimeString(t, format);
 }
@@ -89,7 +89,7 @@ void
 COSTime::
 getTime(int *year, int *month, int *day, int *hour, int *min, int *sec)
 {
-  time_t t = time(0);
+  time_t t = time(nullptr);
 
   getTime(t, year, month, day, hour, min, sec);
 }
@@ -170,7 +170,7 @@ getHRTime(CHRTime &t)
 {
   struct timeval timeval;
 
-  gettimeofday(&timeval, 0);
+  gettimeofday(&timeval, nullptr);
 
   t.secs  = timeval.tv_sec;
   t.usecs = timeval.tv_usec;

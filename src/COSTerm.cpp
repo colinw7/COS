@@ -70,7 +70,7 @@ std::string
 COSTerm::
 getTerminalPath()
 {
-  char *tty_name = ctermid(0);
+  char *tty_name = ctermid(nullptr);
 
   if (! tty_name)
     return "";
