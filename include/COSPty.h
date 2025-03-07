@@ -49,6 +49,8 @@ class COSPty {
   bool set_cbreak();
   bool reset_cbreak();
 
+  bool set_tty_crmod();
+
   bool close_master();
   bool close_slave();
 

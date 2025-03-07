@@ -6,6 +6,7 @@
 #include <CSignalOpt.h>
 
 #include <cstdio>
+#include <cstring>
 #include <cerrno>
 #include <cassert>
 #include <cstdlib>
@@ -408,6 +409,30 @@ reset_cbreak(int fd, struct termios *save_termios)
 
   return true;
 }
+
+bool
+COSPty::
+set_tty_crmod()
+{
+  struct termios t;
+
+  if (tcgetattr(0, &t) < 0)
+    return false;
+
+  struct termios t1 = t;
+
+  t1.c_iflag |= ICRNL | IXON;
+  t1.c_lflag |= ICANON;
+
+  memcpy(t1.c_cc, t.c_cc, sizeof(t1.c_cc));
+
+  if (tcsetattr(0, TCSAFLUSH, &t1) < 0)
+    return false;
+
+  return true;
+}
+
+//---
 
 bool
 COSPty::
